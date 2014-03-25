@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.xnote"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/sticky_note"
+        android:label="@string/app_name" 
+        android:logo="@drawable/sticky_note">
+        <activity
+            android:name="com.example.xnote.MainActivity"
+            android:label="@string/app_name" 
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@android:style/Theme.Holo.Light">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="text/plain" />
+			</intent-filter>
+        </activity>
+         <activity
+            android:name=".RecentNotes"
+            android:label="Recent Notes"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="stateHidden" 
+            android:theme="@android:style/Theme.Holo.Light">
+        </activity>
+    </application>
+</manifest>
