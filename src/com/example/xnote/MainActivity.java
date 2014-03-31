@@ -27,6 +27,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import java.security.*;
 
 
 /**
@@ -74,6 +75,10 @@ public class MainActivity extends Activity {
 
 				SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
 				String mFormatedTimestamp = s.format(new Date());
+				
+				long unixTime = System.currentTimeMillis() / 1000L;
+				String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath().toString()+"/xnote/";
+				String fileNameTimestamp = baseDir+String.valueOf(unixTime)+".xml";
 
 				try {
 
@@ -87,7 +92,7 @@ public class MainActivity extends Activity {
 					doc.appendChild(rootElement);
 
 					Element timestamp = doc.createElement("timestamp");
-					timestamp.appendChild(doc.createTextNode(mFormatedTimestamp));
+					timestamp.appendChild(doc.createTextNode(String.valueOf(unixTime)));
 					rootElement.appendChild(timestamp);
 
 					Element title = doc.createElement("title");
@@ -98,9 +103,18 @@ public class MainActivity extends Activity {
 					message.appendChild(doc.createTextNode(mNoteMessage));
 					rootElement.appendChild(message);
 
-					long unixTime = System.currentTimeMillis() / 1000L;
-					String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath().toString()+"/xnote/";
-					String fileNameTimestamp = baseDir+String.valueOf(unixTime)+".xml";
+					Element message_length = doc.createElement("message_length");
+					message_length.appendChild(doc.createTextNode(String.valueOf( mNoteMessage.length() )));
+					rootElement.appendChild(message_length);
+					
+					Element title_length = doc.createElement("title_length");
+					title_length.appendChild(doc.createTextNode(String.valueOf( mNoteTitle.length() )));
+					rootElement.appendChild(title_length);
+					
+					
+					Element message_sha256 = doc.createElement("message_sha256");
+					message_sha256.appendChild(doc.createTextNode( sha256(mNoteMessage) ));
+					rootElement.appendChild(message_sha256);
 
 					// write the content into xml file
 					TransformerFactory transformerFactory = TransformerFactory
@@ -163,6 +177,22 @@ public class MainActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+	
+	public static String sha256(String base) {
+		try{
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(base.getBytes("UTF-8"));
+			StringBuffer hexString = new StringBuffer();
 
+			for (int i = 0; i < hash.length; i++) {
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1) hexString.append('0');
+				hexString.append(hex);
+			}
 
+			return hexString.toString();
+		} catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+	}
 }
