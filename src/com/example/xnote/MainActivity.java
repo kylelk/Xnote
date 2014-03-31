@@ -133,11 +133,16 @@ public class MainActivity extends Activity {
 	public void handleSendText(Intent intent)
 	{
 		String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+		String subjectText = intent.getStringExtra(Intent.EXTRA_SUBJECT);
 		if (sharedText != null)
 		{ 
 			EditText noteTextFeild = (EditText) findViewById(R.id.note_text);
 			noteTextFeild.setText(sharedText);
 		} 
+	    if (subjectText != null) {
+			EditText noteTitleFeild = (EditText) findViewById(R.id.note_title);
+			noteTitleFeild.setText(subjectText);
+		}
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
