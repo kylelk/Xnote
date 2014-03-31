@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.security.*;
+import java.util.*;
 
 
 /**
@@ -115,6 +116,33 @@ public class MainActivity extends Activity {
 					Element message_sha256 = doc.createElement("message_sha256");
 					message_sha256.appendChild(doc.createTextNode( sha256(mNoteMessage) ));
 					rootElement.appendChild(message_sha256);
+					
+					Element message_other = doc.createElement("other");
+					//message_other.appendChild(doc.createTextNode( sha256(mNoteMessage) ));
+					//rootElement.appendChild(message_other);
+					
+					Intent intent = getIntent();
+					String action = intent.getAction();
+					String type = intent.getType();
+					if (Intent.ACTION_SEND.equals(action) && type != null)
+					{
+						Bundle bundle = intent.getExtras();
+						if (bundle != null) {
+							Set<String> keys = bundle.keySet();
+							Iterator<String> it = keys.iterator();
+							while (it.hasNext()) {
+								String key = it.next();
+								//Log.e(LOG_TAG,"[" + key + "=" + bundle.get(key)+"]");
+								Element other = doc.createElement(key);
+								other.appendChild(doc.createTextNode( bundle.get(key).toString() ));
+								message_other.appendChild(other);
+							}
+						}
+					}
+					
+					rootElement.appendChild(message_other);
+					
+					
 
 					// write the content into xml file
 					TransformerFactory transformerFactory = TransformerFactory
