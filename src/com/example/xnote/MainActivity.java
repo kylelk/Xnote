@@ -74,8 +74,8 @@ public class MainActivity extends Activity {
 				EditText noteTextFeild = (EditText) findViewById(R.id.note_text);
 				String mNoteMessage = noteTextFeild.getText().toString();
 
-				SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
-				String mFormatedTimestamp = s.format(new Date());
+				//SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
+				//String mFormatedTimestamp = s.format(new Date());
 				
 				long unixTime = System.currentTimeMillis() / 1000L;
 				String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath().toString()+"/xnote/";
@@ -117,7 +117,7 @@ public class MainActivity extends Activity {
 					message_sha256.appendChild(doc.createTextNode( sha256(mNoteMessage) ));
 					rootElement.appendChild(message_sha256);
 					
-					Element message_other = doc.createElement("other");
+					Element message_other = doc.createElement("received_intent");
 					//message_other.appendChild(doc.createTextNode( sha256(mNoteMessage) ));
 					//rootElement.appendChild(message_other);
 					
@@ -133,7 +133,8 @@ public class MainActivity extends Activity {
 							while (it.hasNext()) {
 								String key = it.next();
 								//Log.e(LOG_TAG,"[" + key + "=" + bundle.get(key)+"]");
-								Element other = doc.createElement(key);
+								Element other = doc.createElement("intent_field");
+								other.setAttribute("name", key);
 								other.appendChild(doc.createTextNode( bundle.get(key).toString() ));
 								message_other.appendChild(other);
 							}
