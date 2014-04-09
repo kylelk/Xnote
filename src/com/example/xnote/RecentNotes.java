@@ -35,6 +35,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import java.io.*;
 
 public class RecentNotes extends Activity {
 	private ListView mainListView ;  
@@ -57,7 +58,13 @@ public class RecentNotes extends Activity {
 		
 		final String path = Environment.getExternalStorageDirectory().toString()+"/xnote/";
 		File f = new File(path);        
-		final File files[] = f.listFiles();	
+		final File [] files = f.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return name.endsWith(".xml");
+				}
+			});
+		
 		final ArrayList<String> mNoteTitle = new ArrayList<String>();
 		final ArrayList<String> mNoteContent = new ArrayList<String>();
 		for (int i=0; i < files.length; i++)
