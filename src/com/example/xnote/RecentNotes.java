@@ -36,6 +36,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import java.io.*;
+import java.util.*;
 
 public class RecentNotes extends Activity {
 	private ListView mainListView ;  
@@ -64,6 +65,10 @@ public class RecentNotes extends Activity {
 					return name.endsWith(".xml");
 				}
 			});
+		
+		// sort the order of the recent notes
+		Arrays.sort(files);
+		Collections.reverse(Arrays.asList(files));
 		
 		final ArrayList<String> mNoteTitle = new ArrayList<String>();
 		final ArrayList<String> mNoteContent = new ArrayList<String>();
